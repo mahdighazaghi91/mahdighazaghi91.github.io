@@ -1,417 +1,572 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>مهدی | صفحه‌ی شخصی</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --cloud: #0a0d1a;
-    --indigo: #e2e8f0;
-    --yellow: #FFC857;
-    --sky: #4facfe;
-    --coral: #ff7675;
-    --mint: #00cec9;
-    --paper: rgba(255, 255, 255, 0.03);
-    --border-color: rgba(255, 255, 255, 0.08);
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>مهدی | رزومه کهکشانی 3D</title>
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    /* ------ RESET & BASE ------ */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  *{ box-sizing: border-box; }
+    body {
+      font-family: 'Vazirmatn', sans-serif;
+      background: #0a0a14;
+      color: #e2e8f0;
+      overflow-x: hidden;
+      line-height: 1.7;
+      scroll-behavior: smooth;
+    }
 
-  html, body{
-    margin:0;
-    padding:0;
-    background: var(--cloud);
-    overflow-x: hidden;
-    font-family: 'Vazirmatn', sans-serif;
-    color: var(--indigo);
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+    /* ------ CANVAS STARFIELD ------ */
+    #starfield {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
 
-  /* پس‌زمینه پویا و متحرک */
-  .bg-glows {
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-    top: 0;
-    left: 0;
-    z-index: -1;
-    pointer-events: none;
-  }
-  .glow {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.15;
-    animation: floatGlow 10s infinite alternate ease-in-out;
-  }
-  .glow-1 { width: 400px; height: 400px; background: var(--sky); top: -10%; left: -10%; }
-  .glow-2 { width: 500px; height: 500px; background: var(--coral); bottom: -10%; right: -10%; animation-delay: -3s; }
-  .glow-3 { width: 300px; height: 300px; background: var(--yellow); top: 40%; right: 20%; animation-delay: -5s; }
+    /* ------ MAIN WRAPPER ------ */
+    .cosmic-wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem 2rem 4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+    }
 
-  @keyframes floatGlow {
-    0% { transform: translate(0, 0) scale(1); }
-    100% { transform: translate(50px, 40px) scale(1.15); }
-  }
+    /* ------ GLASS CARDS WITH ADVANCED BACKDROP ------ */
+    .glass-panel {
+      background: rgba(15, 15, 30, 0.55);
+      backdrop-filter: blur(18px) saturate(180%);
+      -webkit-backdrop-filter: blur(18px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 2.5rem;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8), inset 0 0 30px rgba(56,189,248,0.2);
+      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
 
-  .wrap{
-    width: 100%;
-    max-width: 760px;
-    padding: 40px 20px;
-  }
+    .glass-panel:hover {
+      border-color: rgba(56,189,248,0.6);
+      box-shadow: 0 30px 60px -15px rgba(56,189,248,0.3), inset 0 0 40px rgba(99,102,241,0.25);
+    }
 
-  .eyebrow{
-    text-align:center;
-    font-family:'Space Grotesk', sans-serif;
-    letter-spacing: 4px;
-    font-size: 13px;
-    color: var(--sky);
-    font-weight:700;
-    text-transform:uppercase;
-    margin-bottom: 12px;
-    opacity:0;
-    animation: fadeUp 0.8s cubic-bezier(0.2, 1, 0.2, 1) forwards;
-  }
+    /* ------ HERO SECTION WITH 3D LAYERS ------ */
+    .hero-3d {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      position: relative;
+      border-radius: 3rem;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
 
-  h1.site-title{
-    text-align:center;
-    font-size: clamp(32px, 7vw, 48px);
-    font-weight: 900;
-    margin: 0 0 10px;
-    background: linear-gradient(135deg, #fff 30%, #8a99ad);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    opacity:0;
-    animation: fadeUp 0.8s cubic-bezier(0.2, 1, 0.2, 1) 0.15s forwards;
-  }
+    .hero-bg-glow {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 30% 40%, rgba(56,189,248,0.25) 0%, transparent 60%);
+      z-index: 0;
+    }
 
-  .subtitle{
-    text-align:center;
-    color:#94a3b8;
-    font-size: 16px;
-    margin: 0 0 40px;
-    opacity:0;
-    animation: fadeUp 0.8s cubic-bezier(0.2, 1, 0.2, 1) 0.3s forwards;
-  }
+    .hero-title {
+      font-size: clamp(3.2rem, 8vw, 5.5rem);
+      font-weight: 800;
+      background: linear-gradient(to right, #fff, #bae6fd, #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 25px #0ea5e9);
+      letter-spacing: -0.5px;
+      z-index: 2;
+      margin-bottom: 0.5rem;
+      transform: translateZ(50px);
+      animation: titleGlow 3s infinite alternate;
+    }
 
-  /* ---- کارت سه بعدی پاسپورت ---- */
-  .passport-container {
-    perspective: 1000px;
-    opacity:0;
-    animation: fadeUp 1s cubic-bezier(0.2, 1, 0.2, 1) 0.45s forwards;
-  }
+    @keyframes titleGlow {
+      0% { filter: drop-shadow(0 0 20px #38bdf8); }
+      100% { filter: drop-shadow(0 0 45px #6366f1); }
+    }
 
-  .passport{
-    position: relative;
-    background: var(--paper);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 32px;
-    padding: 40px 36px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2), 0 30px 60px rgba(0, 0, 0, 0.4);
-    border: 1.5px solid var(--border-color);
-    transform-style: preserve-3d;
-    transition: transform 0.15s ease-out, box-shadow 0.3s ease;
-  }
+    .hero-sub {
+      font-size: 1.4rem;
+      color: #cbd5e1;
+      z-index: 2;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(10px);
+      padding: 0.7rem 2.2rem;
+      border-radius: 5rem;
+      border: 1px solid rgba(255,255,255,0.25);
+      margin-top: 1rem;
+    }
 
-  .passport:hover {
-    box-shadow: 0 10px 40px rgba(79, 172, 254, 0.15), 0 30px 70px rgba(0, 0, 0, 0.5);
-  }
+    .floating-shapes {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
 
-  .passport::before{
-    content:"";
-    position:absolute;
-    inset: 12px;
-    border: 1.5px dashed rgba(255, 255, 255, 0.15);
-    border-radius: 22px;
-    pointer-events:none;
-    transform: translateZ(10px);
-  }
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(30px);
+      opacity: 0.6;
+    }
 
-  .passport-head{
-    display:flex;
-    align-items:center;
-    gap: 26px;
-    margin-bottom: 36px;
-    transform: translateZ(30px);
-  }
+    .shape1 { width: 350px; height: 350px; background: #2563eb; top: -80px; right: -60px; animation: drift1 12s infinite alternate; }
+    .shape2 { width: 280px; height: 280px; background: #7c3aed; bottom: -70px; left: -50px; animation: drift2 10s infinite alternate; }
+    .shape3 { width: 200px; height: 200px; background: #059669; top: 40%; left: 30%; animation: drift3 14s infinite alternate; }
 
-  .avatar-holder{
-    width: 115px;
-    height: 115px;
-    border-radius: 28px; /* استایل مدرن مربعی با گوشه گرد */
-    background: linear-gradient(135deg, var(--sky), var(--mint));
-    padding: 4px;
-    flex-shrink:0;
-    box-shrink: 0;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 12px 24px -6px rgba(79, 172, 254, 0.4);
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  }
-  
-  .passport:hover .avatar-holder {
-    transform: scale(1.05) rotate(-3deg);
-  }
+    @keyframes drift1 { 0% { transform: translate(0,0); } 100% { transform: translate(-40px, 40px); } }
+    @keyframes drift2 { 0% { transform: translate(0,0); } 100% { transform: translate(35px, -30px); } }
+    @keyframes drift3 { 0% { transform: translate(0,0); } 100% { transform: translate(-25px, -45px); } }
 
-  .avatar-holder img{
-    width:100%;
-    height:100%;
-    border-radius:24px;
-    display:block;
-    background: #13192b;
-    object-fit: cover;
-  }
+    /* ------ GRID LAYOUT ------ */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 2.2rem;
+    }
 
-  .passport-name-block .label{
-    font-family:'Space Grotesk', sans-serif;
-    font-size: 12px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--coral);
-    font-weight: 700;
-    margin-bottom:6px;
-  }
-  .passport-name-block .name{
-    font-size: 28px;
-    font-weight: 900;
-    color: #fff;
-    text-shadow: 0 2px 10px rgba(255,255,255,0.1);
-  }
+    @media (max-width: 950px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+      .cosmic-wrapper {
+        padding: 1.5rem;
+      }
+    }
 
-  .field-grid{
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px 32px;
-    transform: translateZ(20px);
-  }
-  .field{
-    border-top: 1.5px solid rgba(255, 255, 255, 0.08);
-    padding-top: 12px;
-    opacity: 0;
-    animation: fadeUp 0.6s cubic-bezier(0.2, 1, 0.2, 1) forwards;
-  }
-  
-  /* انیمیشن ردیفی فیلدها */
-  .field:nth-child(1) { animation-delay: 0.6s; }
-  .field:nth-child(2) { animation-delay: 0.7s; }
-  .field:nth-child(3) { animation-delay: 0.8s; }
-  .field:nth-child(4) { animation-delay: 0.9s; }
-  .field:nth-child(5) { animation-delay: 1.0s; }
+    /* ------ SIDEBAR PROFILE ------ */
+    .profile-side {
+      padding: 2.2rem 1.8rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      height: fit-content;
+    }
 
-  .field .label{
-    font-family:'Space Grotesk', sans-serif;
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform:uppercase;
-    color:#64748b;
-    font-weight:700;
-    margin-bottom: 6px;
-  }
-  .field .value{
-    font-size: 17px;
-    font-weight: 500;
-    line-height: 1.6;
-    color: #cbd5e1;
-  }
+    .avatar-3d {
+      width: 150px;
+      height: 150px;
+      background: linear-gradient(145deg, #1e40af, #38bdf8);
+      border-radius: 35% 65% 45% 55% / 52% 48% 52% 48%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4.5rem;
+      font-weight: 800;
+      color: white;
+      box-shadow: 0 25px 40px -10px #2563eb;
+      margin-bottom: 1.5rem;
+      animation: morphAvatar 7s infinite alternate;
+      border: 2px solid rgba(255,255,255,0.4);
+      text-shadow: 0 0 20px black;
+    }
 
-  .about-line{
-    grid-column: 1 / -1;
-  }
+    @keyframes morphAvatar {
+      0% { border-radius: 35% 65% 45% 55% / 52% 48% 52% 48%; }
+      100% { border-radius: 55% 45% 60% 40% / 40% 55% 45% 60%; }
+    }
 
-  /* ---- بخش بارکد تزئینی گذرنامه ---- */
-  .passport-barcode {
-    margin-top: 32px;
-    padding-top: 20px;
-    border-top: 1px dashed rgba(255,255,255,0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #475569;
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 11px;
-    letter-spacing: 1px;
-    transform: translateZ(15px);
-  }
-  .barcode-lines {
-    display: flex;
-    gap: 2px;
-    height: 30px;
-    opacity: 0.4;
-  }
-  .barcode-lines span {
-    background: currentColor;
-    width: 2px;
-    height: 100%;
-  }
-  .barcode-lines span:nth-child(even) { width: 4px; }
-  .barcode-lines span:nth-child(37) { width: 1px; }
+    .info-stack {
+      width: 100%;
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
 
-  /* ---- Stamps ---- */
-  .stamps{
-    display:flex;
-    flex-wrap:wrap;
-    gap: 16px;
-    justify-content:center;
-    margin-top: 40px;
-    transform: translateZ(25px);
-  }
-  .stamp{
-    font-family:'Space Grotesk', sans-serif;
-    font-weight: 700;
-    font-size: 13px;
-    padding: 10px 20px;
-    border-radius: 14px; /* طرح جدید مُهرهای مدرن */
-    border: 2px solid currentColor;
-    background: rgba(255,255,255,0.01);
-    transform: rotate(var(--r,-3deg)) scale(0);
-    opacity:0;
-    animation: stampIn 0.6s cubic-bezier(.175, .885, .32, 1.275) forwards;
-    cursor: pointer;
-    user-select:none;
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s, box-shadow 0.3s;
-  }
-  
-  .stamp:hover{ 
-    transform: rotate(0deg) scale(1.15) !important;
-    background: currentColor;
-    color: #000 !important;
-    box-shadow: 0 10px 20px -5px rgba(255,255,255,0.1);
-  }
+    .info-chip {
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(12px);
+      padding: 1rem 1.2rem;
+      border-radius: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid rgba(255,255,255,0.15);
+      font-weight: 500;
+      transition: 0.3s;
+    }
 
-  .stamp.c1{ color:var(--sky); animation-delay: 1.1s; --r:-5deg;}
-  .stamp.c2{ color:var(--coral); animation-delay: 1.25s; --r:4deg;}
-  .stamp.c3{ color:var(--mint); animation-delay: 1.4s; --r:-2deg;}
-  .stamp.c4{ color:var(--yellow); animation-delay: 1.55s; --r:6deg;}
+    .info-chip i {
+      color: #38bdf8;
+      font-size: 1.2rem;
+      background: rgba(56,189,248,0.15);
+      padding: 0.5rem;
+      border-radius: 50%;
+    }
 
-  footer{
-    text-align:center;
-    margin-top: 50px;
-    font-size: 13px;
-    color:#475569;
-    opacity:0;
-    animation: fadeUp .6s ease 1.7s forwards;
-  }
+    .info-chip:hover {
+      background: rgba(56,189,248,0.15);
+      border-color: #38bdf8;
+    }
 
-  /* ---- انیمیشن‌ها ---- */
-  @keyframes fadeUp{
-    from{ opacity:0; transform: translateY(30px); }
-    to{ opacity:1; transform: translateY(0); }
-  }
-  @keyframes stampIn{
-    from{ opacity:0; transform: rotate(var(--r)) scale(1.6); filter: blur(5px); }
-    to{ opacity:1; transform: rotate(var(--r)) scale(1); filter: blur(0); }
-  }
+    /* ------ MAIN CONTENT ------ */
+    .content-main {
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2.8rem;
+    }
 
-  @media (prefers-reduced-motion: reduce){
-    *{ animation: none !important; opacity:1 !important; transform:none !important; backdrop-filter: none !important; }
-  }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 1.8rem;
+      border-bottom: 2px solid rgba(255,255,255,0.15);
+      padding-bottom: 0.8rem;
+    }
 
-  @media (max-width: 480px){
-    .field-grid{ grid-template-columns: 1fr; gap: 16px; }
-    .passport-head{ flex-direction: column; text-align: center; gap:16px; }
-    .passport{ padding: 30px 20px; }
-    .passport-barcode { flex-direction: column; gap: 10px; }
-  }
-</style>
+    .section-header i {
+      color: #38bdf8;
+      font-size: 2rem;
+      filter: drop-shadow(0 0 10px #38bdf8);
+    }
+
+    /* ------ SKILL CARDS ADVANCED ------ */
+    .skills-galaxy {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .skill-nebula {
+      background: rgba(20, 20, 45, 0.6);
+      backdrop-filter: blur(15px);
+      padding: 1.8rem 0.8rem;
+      border-radius: 2rem;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: 0.4s;
+      transform-style: preserve-3d;
+      perspective: 600px;
+    }
+
+    .skill-nebula:hover {
+      transform: translateY(-15px) rotateY(8deg) scale(1.05);
+      background: rgba(56,189,248,0.2);
+      border-color: #38bdf8;
+      box-shadow: 0 30px 35px -15px #2563eb;
+    }
+
+    .skill-nebula i {
+      font-size: 2.4rem;
+      color: #a5b4fc;
+      margin-bottom: 1rem;
+    }
+
+    /* ------ PROJECT CARDS WITH PERSPECTIVE ------ */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.8rem;
+    }
+
+    .project-card {
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(16px);
+      border-radius: 2rem;
+      padding: 1.8rem;
+      border: 1px solid rgba(255,255,255,0.15);
+      transition: 0.4s;
+      transform-style: preserve-3d;
+    }
+
+    .project-card:hover {
+      transform: translateY(-18px) rotateX(4deg) rotateY(-5deg);
+      box-shadow: 0 35px 45px -15px #4f46e5;
+      border-color: #818cf8;
+    }
+
+    .project-icon {
+      font-size: 2.2rem;
+      color: #38bdf8;
+      margin-bottom: 1rem;
+    }
+
+    /* ------ TIMELINE ENHANCED ------ */
+    .timeline-cosmic {
+      border-right: 3px dashed #38bdf8;
+      padding-right: 2.2rem;
+      margin-top: 1rem;
+    }
+
+    .timeline-node {
+      margin-bottom: 2.2rem;
+      position: relative;
+    }
+
+    .timeline-node::before {
+      content: "";
+      width: 20px;
+      height: 20px;
+      background: #38bdf8;
+      border-radius: 50%;
+      position: absolute;
+      right: -2.65rem;
+      top: 6px;
+      box-shadow: 0 0 25px #38bdf8;
+      border: 3px solid white;
+    }
+
+    /* ------ RESPONSIVE FINE TUNING ------ */
+    @media (max-width: 600px) {
+      .hero-title {
+        font-size: 2.8rem;
+      }
+    }
+  </style>
 </head>
 <body>
+  <!-- Starfield Canvas for interactive particles -->
+  <canvas id="starfield"></canvas>
 
-  <div class="bg-glows">
-    <div class="glow glow-1"></div>
-    <div class="glow glow-2"></div>
-    <div class="glow glow-3"></div>
-  </div>
-
-  <div class="wrap">
-    <div class="eyebrow">Personal Passport</div>
-    <h1 class="site-title">صفحه‌ی شخصیِ مهدی</h1>
-    <p class="subtitle">یه گذرنامه‌ی کوچیک از علاقه‌ها و خودم 🧭</p>
-
-    <div class="passport-container" id="passportCard">
-      <div class="passport">
-        <div class="passport-head">
-          <div class="avatar-holder">
-            <img src="data:image/png;base64,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اقرأ_المزيد_طرق_الربط_بالقالب" alt="آواتار مهدی">
-          </div>
-          <div class="passport-name-block">
-            <div class="label">Identity Name</div>
-            <div class="name">مهدی</div>
-          </div>
-        </div>
-
-        <div class="field-grid">
-          <div class="field">
-            <div class="label">Age / Age</div>
-            <div class="value">۱۴ سال</div>
-          </div>
-          <div class="field">
-            <div class="label">Location / Lives in</div>
-            <div class="value">تهران</div>
-          </div>
-          <div class="field">
-            <div class="label">Origin / From</div>
-            <div class="value">کاشان</div>
-          </div>
-          <div class="field">
-            <div class="label">Interests / Loves</div>
-            <div class="value">زبان انگلیسی 🇬🇧</div>
-          </div>
-          <div class="field about-line">
-            <div class="label">Biography / About</div>
-            <div class="value">
-              سلام! من مهدی هستم، ۱۴ سالمه و ساکن تهرانم، ولی اصالتاً اهل کاشانم.
-              عاشق یادگیری زبان انگلیسی ام و همیشه دنبال یاد گرفتن کلمه‌ها و جمله‌های جدیدم.
-            </div>
-          </div>
-        </div>
-
-        <div class="passport-barcode">
-          <div class="barcode-lines">
-            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-          </div>
-          <div>MHD-2026-PASSPORT</div>
-        </div>
-
-        <div class="stamps">
-          <span class="stamp c1">Tehran</span>
-          <span class="stamp c2">Kashan</span>
-          <span class="stamp c3">English Lover</span>
-          <span class="stamp c4">Age 14</span>
-        </div>
+  <div class="cosmic-wrapper">
+    
+    <!-- HERO SECTION -->
+    <div class="glass-panel hero-3d">
+      <div class="hero-bg-glow"></div>
+      <div class="floating-shapes">
+        <div class="shape shape1"></div>
+        <div class="shape shape2"></div>
+        <div class="shape shape3"></div>
       </div>
+      <h1 class="hero-title">مهدی</h1>
+      <p class="hero-sub">✦ English Explorer · Tehran ✦</p>
     </div>
 
-    <footer>ساخته‌شده با ❤️ توسط مهدی</footer>
+    <!-- DASHBOARD GRID -->
+    <div class="dashboard-grid">
+      
+      <!-- SIDEBAR -->
+      <aside class="glass-panel profile-side">
+        <div class="avatar-3d">م</div>
+        <h2 style="font-size: 2rem; font-weight: 700; margin-bottom: 0.3rem;">مهدی</h2>
+        <p style="color: #b9c7dd; background: #1e293b; padding: 0.3rem 1.4rem; border-radius: 2rem; font-size: 0.95rem;">🇬🇧 English Learner</p>
+        
+        <div class="info-stack">
+          <div class="info-chip"><span>🌟 سن</span> <span><i class="fa-solid fa-star"></i> ۱۴ سال</span></div>
+          <div class="info-chip"><span>🏙️ ساکن</span> <span><i class="fa-solid fa-city"></i> تهران</span></div>
+          <div class="info-chip"><span>🌿 اصالت</span> <span><i class="fa-solid fa-tree"></i> کاشان</span></div>
+          <div class="info-chip"><span>📖 علاقه</span> <span><i class="fa-solid fa-language"></i> انگلیسی</span></div>
+        </div>
+        <div style="margin-top: 2rem; color: #94a3b8; font-size: 0.9rem;">
+          <i class="fa-solid fa-quote-right"></i> هر روز یک کلمه جدید
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="glass-panel content-main">
+        
+        <!-- About Section -->
+        <section>
+          <div class="section-header">
+            <i class="fa-solid fa-user-astronaut"></i>
+            <h3>دربارهٔ من</h3>
+          </div>
+          <p style="font-size: 1.15rem; line-height: 2.1; color: #d1d5db;">
+            سلام! من <strong style="color: #38bdf8; font-weight: 700;">مهدی</strong> هستم، ۱۴ ساله از تهران با ریشه‌های <strong style="color: #38bdf8;">کاشانی</strong>. 
+            دنیای من پر از کلمه‌های انگلیسی و کشف لهجه‌هاست. عاشق اینم که بتونم مثل یه native صحبت کنم و داستان‌های خودم رو به انگلیسی بنویسم.
+          </p>
+        </section>
+
+        <!-- Skills Galaxy -->
+        <section>
+          <div class="section-header">
+            <i class="fa-solid fa-rocket"></i>
+            <h3>مهارت‌های کهکشانی</h3>
+          </div>
+          <div class="skills-galaxy">
+            <div class="skill-nebula"><i class="fa-solid fa-headphones"></i><br><span>Listening</span></div>
+            <div class="skill-nebula"><i class="fa-solid fa-book-open-reader"></i><br><span>Reading</span></div>
+            <div class="skill-nebula"><i class="fa-solid fa-pen-fancy"></i><br><span>Writing</span></div>
+            <div class="skill-nebula"><i class="fa-solid fa-globe"></i><br><span>Vocabulary</span></div>
+          </div>
+        </section>
+
+        <!-- Portfolio Advanced -->
+        <section>
+          <div class="section-header">
+            <i class="fa-solid fa-layer-group"></i>
+            <h3>پروژه‌های یادگیری</h3>
+          </div>
+          <div class="project-grid">
+            <div class="project-card">
+              <div class="project-icon"><i class="fa-solid fa-clock"></i></div>
+              <h4>چالش روزانه</h4>
+              <p>تمرین ۲۰ کلمه جدید و استفاده در جمله.</p>
+            </div>
+            <div class="project-card">
+              <div class="project-icon"><i class="fa-solid fa-podcast"></i></div>
+              <h4>پادکست گوش کن</h4>
+              <p>درک مکالمات سریع بدون زیرنویس.</p>
+            </div>
+            <div class="project-card">
+              <div class="project-icon"><i class="fa-solid fa-feather"></i></div>
+              <h4>نوشتن خلاق</h4>
+              <p>داستان کوتاه انگلیسی هر هفته.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Timeline Journey -->
+        <section>
+          <div class="section-header">
+            <i class="fa-solid fa-timeline"></i>
+            <h3>مسیر یادگیری</h3>
+          </div>
+          <div class="timeline-cosmic">
+            <div class="timeline-node">
+              <h4>شروع ماجراجویی</h4>
+              <p>یادگیری الفبا و کلمات پایه.</p>
+            </div>
+            <div class="timeline-node">
+              <h4>تقویت Listening</h4>
+              <p>تماشای فیلم و کارتون انگلیسی.</p>
+            </div>
+            <div class="timeline-node">
+              <h4>نوشتن حرفه‌ای</h4>
+              <p>ساخت پاراگراف‌های منسجم و خلاقانه.</p>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
   </div>
 
   <script>
-    const card = document.getElementById('passportCard');
-    const innerCard = card.querySelector('.passport');
+    (function() {
+      // Advanced interactive starfield canvas
+      const canvas = document.getElementById('starfield');
+      const ctx = canvas.getContext('2d');
+      let width, height;
+      let particles = [];
+      
+      function resizeCanvas() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+        initParticles(Math.floor(width * 0.12)); // density based on width
+      }
 
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      
-      const xc = rect.width / 2;
-      const yc = rect.height / 2;
-      
-      // محاسبه میزان چرخش (حداکثر ۱۰ درجه)
-      const angleX = (yc - y) / yc * 10;
-      const angleY = -(xc - x) / xc * 10;
-      
-      innerCard.style.transform = `rotateX(${angleX}deg) rotateY(${angleY}deg)`;
-    });
+      function initParticles(count) {
+        particles = [];
+        for (let i = 0; i < count; i++) {
+          particles.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            radius: Math.random() * 2.2 + 0.8,
+            speedX: (Math.random() - 0.5) * 0.25,
+            speedY: (Math.random() - 0.5) * 0.25,
+            alpha: Math.random() * 0.7 + 0.3,
+          });
+        }
+      }
 
-    card.addEventListener('mouseleave', () => {
-      innerCard.style.transform = 'rotateX(0deg) rotateY(0deg)';
-    });
+      function drawStars() {
+        ctx.clearRect(0, 0, width, height);
+        particles.forEach(p => {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha})`;
+          ctx.fill();
+          // subtle glow for some
+          if (p.radius > 1.5) {
+            ctx.shadowColor = 'rgba(56,189,248,0.8)';
+            ctx.shadowBlur = 8;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+          }
+        });
+      }
+
+      function updateParticles() {
+        particles.forEach(p => {
+          p.x += p.speedX;
+          p.y += p.speedY;
+          
+          // wrap around
+          if (p.x < 0) p.x = width;
+          if (p.x > width) p.x = 0;
+          if (p.y < 0) p.y = height;
+          if (p.y > height) p.y = 0;
+          
+          // slight twinkle effect by varying alpha slowly (optional dynamic)
+        });
+      }
+
+      function animate() {
+        drawStars();
+        updateParticles();
+        requestAnimationFrame(animate);
+      }
+
+      window.addEventListener('resize', () => {
+        resizeCanvas();
+      });
+
+      // Mouse interaction for particles attraction (optional)
+      let mouse = { x: null, y: null, radius: 120 };
+      window.addEventListener('mousemove', (e) => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+      });
+
+      // Modify update to include mouse repulsion/attraction
+      const originalUpdate = updateParticles;
+      updateParticles = function() {
+        particles.forEach(p => {
+          p.x += p.speedX;
+          p.y += p.speedY;
+          
+          // Mouse interaction: gentle push away from cursor
+          if (mouse.x && mouse.y) {
+            let dx = p.x - mouse.x;
+            let dy = p.y - mouse.y;
+            let dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < mouse.radius) {
+              let force = (mouse.radius - dist) / mouse.radius;
+              let angle = Math.atan2(dy, dx);
+              p.x += Math.cos(angle) * force * 0.8;
+              p.y += Math.sin(angle) * force * 0.8;
+            }
+          }
+          
+          if (p.x < 0) p.x = width;
+          if (p.x > width) p.x = 0;
+          if (p.y < 0) p.y = height;
+          if (p.y > height) p.y = 0;
+        });
+      };
+
+      resizeCanvas();
+      animate();
+    })();
   </script>
 </body>
 </html>
